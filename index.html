@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoLab Farm — Plant Growth Simulator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-dark: #1b4332;
+      --green: #2d6a4f;
+      --green-mid: #40916c;
+      --green-light: #74c69d;
+      --green-pale: #d8f3dc;
+      --amber: #f4a261;
+      --amber-dark: #e76f51;
+      --sky: #90e0ef;
+      --red: #e63946;
+      --yellow: #f9c74f;
+      --blue: #4895ef;
+      --purple: #9b5de5;
+      --bg: #f0f7e6;
+      --panel: #ffffff;
+      --border: #d4e6c3;
+      --text: #212529;
+      --text-muted: #6c757d;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    #header {
+      background: var(--green-dark);
+      color: #fff;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    #header h1 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 11px;
+      color: var(--green-light);
+      letter-spacing: 1px;
+      flex-shrink: 0;
+    }
+
+    .species-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+
+    .species-btn {
+      background: transparent;
+      border: 2px solid #3a5a47;
+      color: #aaa;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      padding: 5px 9px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.15s;
+      line-height: 1.6;
+    }
+    .species-btn:hover { background: var(--green-mid); border-color: var(--green-mid); color: #fff; }
+    .species-btn.active { background: var(--green-light); border-color: var(--green-light); color: var(--green-dark); }
+
+    .spacer { flex: 1; min-width: 8px; }
+
+    #tick-display { color: #aaa; font-size: 11px; white-space: nowrap; }
+    #tick-display strong { color: var(--green-light); }
+
+    .speed-btns { display: flex; gap: 3px; }
+    .speed-btn {
+      background: transparent;
+      border: 1px solid #555;
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      cursor: pointer;
+      border-radius: 3px;
+      transition: all 0.1s;
+    }
+    .speed-btn.active { background: var(--amber); border-color: var(--amber); color: #111; }
+
+    #pause-btn, #reset-btn {
+      background: transparent;
+      border: 1px solid #555;
+      color: #aaa;
+      padding: 4px 12px;
+      cursor: pointer;
+      border-radius: 3px;
+      font-size: 12px;
+      transition: all 0.1s;
+    }
+    #pause-btn:hover { border-color: var(--amber); color: var(--amber); }
+    #reset-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── MAIN LAYOUT ── */
+    #main {
+      display: grid;
+      grid-template-columns: 240px 1fr 248px;
+      gap: 10px;
+      padding: 10px;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      overflow: hidden;
+    }
+
+    .panel-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--green-dark);
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      border-bottom: 2px solid var(--green-pale);
+      padding-bottom: 7px;
+    }
+
+    /* ── PLANT PANEL ── */
+    #plant-visual {
+      width: 100%;
+      height: 130px;
+      border-radius: 6px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(to bottom, #87ceeb 0%, #87ceeb 55%, #8b6914 55%, #6b4226 100%);
+    }
+
+    #plant-emoji {
+      font-size: 52px;
+      line-height: 1;
+      transition: transform 0.4s, font-size 0.4s;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      position: relative;
+      z-index: 1;
+    }
+    #plant-emoji.big { font-size: 64px; }
+
+    #dead-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      align-items: center;
+      justify-content: center;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: #fff;
+      text-align: center;
+      line-height: 1.8;
+      z-index: 10;
+    }
+    #dead-overlay.show { display: flex; }
+
+    .stage-bar {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 10px;
+    }
+    .stage-pip {
+      flex: 1;
+      height: 5px;
+      background: var(--border);
+      border-radius: 3px;
+      transition: background 0.3s;
+    }
+    .stage-pip.done { background: var(--green-mid); }
+    .stage-pip.now { background: var(--amber); }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+      font-size: 11px;
+    }
+    .stat-label { color: var(--text-muted); }
+    .stat-value { font-weight: 600; }
+
+    .mini-bar {
+      width: 100%;
+      height: 7px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .mini-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s;
+    }
+
+    #science-callout {
+      background: var(--green-pale);
+      border-left: 3px solid var(--green-mid);
+      border-radius: 0 5px 5px 0;
+      padding: 8px 10px;
+      margin-top: 8px;
+    }
+    #science-callout .sc-title {
+      font-weight: 700;
+      font-size: 10px;
+      color: var(--green-dark);
+      margin-bottom: 4px;
+    }
+    #science-callout .sc-body {
+      font-size: 10px;
+      color: #2d4a3a;
+      line-height: 1.5;
+    }
+
+    /* ── CENTER PANEL ── */
+    #center-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    #chart-panel { flex: 1; min-height: 0; }
+    #chart-canvas {
+      width: 100%;
+      display: block;
+      border-radius: 4px;
+      background: #f8fbf5;
+      border: 1px solid var(--border);
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 14px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* Ecosystem */
+    #eco-panel { flex-shrink: 0; }
+    .eco-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      font-size: 11px;
+    }
+    .eco-label { width: 80px; color: var(--text-muted); font-size: 10px; flex-shrink: 0; }
+    .eco-bar { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .eco-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+    .eco-val { width: 32px; text-align: right; font-size: 10px; color: var(--text-muted); }
+
+    /* ── CONTROLS PANEL ── */
+    #controls-panel { overflow-y: auto; }
+
+    .ctrl-group { margin-bottom: 10px; }
+    .ctrl-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+    .ctrl-label span { font-weight: 600; color: var(--text); }
+
+    input[type="range"] {
+      width: 100%;
+      height: 3px;
+      accent-color: var(--green-mid);
+      cursor: pointer;
+    }
+
+    .amend-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-top: 4px;
+    }
+    .amend-btn {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 6px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+    .amend-btn:hover { border-color: var(--green-mid); background: var(--green-pale); }
+    .amend-btn:active { transform: scale(0.96); }
+    .amend-btn.flash { background: var(--green-pale); border-color: var(--green-mid); }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .toggle-btn {
+      width: 38px;
+      height: 20px;
+      background: #ccc;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+    .toggle-btn.on { background: var(--green-mid); }
+    .toggle-btn::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: left 0.2s;
+    }
+    .toggle-btn.on::after { left: 21px; }
+
+    .soil-vals {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      font-size: 10px;
+      margin-top: 4px;
+    }
+    .soil-kv { display: flex; flex-direction: column; }
+    .soil-kv .k { color: var(--text-muted); font-size: 9px; }
+    .soil-kv .v { font-weight: 700; font-size: 11px; }
+
+    /* ── FOOTER ── */
+    #footer {
+      padding: 0 10px 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .stress-row {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 5px;
+      margin-top: 6px;
+    }
+    .stress-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .stress-icon { font-size: 12px; line-height: 1; }
+    .stress-bar {
+      width: 100%;
+      height: 32px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column-reverse;
+    }
+    .stress-fill { width: 100%; border-radius: 3px; transition: height 0.4s; }
+    .stress-lbl { font-size: 8px; color: var(--text-muted); text-align: center; line-height: 1.2; }
+
+    #science-log {
+      font-size: 11px;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-height: 90px;
+      overflow-y: auto;
+    }
+    #science-log .log-stage { color: var(--green-dark); font-weight: 600; }
+    #science-log .log-warn { color: var(--amber-dark); }
+
+    /* Pollination indicator */
+    #poll-row { display: none; }
+    #poll-row.show { display: flex; }
+
+    /* Vernalization indicator */
+    #vern-row { display: none; }
+    #vern-row.show { display: flex; }
+  </style>
+  <script type="module" crossorigin src="/assets/index-BrDxbPUh.js"></script>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div id="header">
+    <h1>🌿 ECOLAB FARM</h1>
+    <div class="species-btns">
+      <button class="species-btn active" data-species="lettuce">🥬 Lettuce T1</button>
+      <button class="species-btn" data-species="tomato">🍅 Tomato T2</button>
+      <button class="species-btn" data-species="corn">🌽 Corn T3</button>
+      <button class="species-btn" data-species="grape">🍇 Grape T4</button>
+    </div>
+    <div class="spacer"></div>
+    <div id="tick-display">Tick <strong id="tick-num">0</strong></div>
+    <div class="speed-btns">
+      <button class="speed-btn active" data-speed="1">1×</button>
+      <button class="speed-btn" data-speed="3">3×</button>
+      <button class="speed-btn" data-speed="10">10×</button>
+    </div>
+    <button id="pause-btn">⏸ Pause</button>
+    <button id="reset-btn">↺ Reset</button>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- PLANT PANEL -->
+    <div class="panel">
+      <div class="panel-title">🌱 Plant</div>
+
+      <div id="plant-visual">
+        <span id="plant-emoji">🌰</span>
+        <div id="dead-overlay">☠️<br>Plant Died<br><small style="font-size:7px; opacity:0.8;">Press Reset</small></div>
+      </div>
+
+      <div class="stage-bar" id="stage-bar">
+        <div class="stage-pip"></div>
+        <div class="stage-pip"></div>
+        <div class="stage-pip"></div>
+        <div class="stage-pip"></div>
+        <div class="stage-pip"></div>
+        <div class="stage-pip"></div>
+        <div class="stage-pip"></div>
+      </div>
+
+      <div class="stat-row">
+        <span class="stat-label">Stage</span>
+        <span class="stat-value" id="stage-lbl" style="color: var(--green-dark)">Seed</span>
+      </div>
+
+      <div class="stat-row" style="margin-bottom: 2px;">
+        <span class="stat-label">Health</span>
+        <span class="stat-value" id="health-num">100</span>
+      </div>
+      <div class="mini-bar">
+        <div class="mini-fill" id="health-fill" style="width:100%; background: var(--green-mid)"></div>
+      </div>
+
+      <div class="stat-row">
+        <span class="stat-label">Water content</span>
+        <span class="stat-value" id="water-num">50%</span>
+      </div>
+      <div class="mini-bar">
+        <div class="mini-fill" id="water-fill" style="width:50%; background: var(--blue)"></div>
+      </div>
+
+      <div class="stat-row">
+        <span class="stat-label">Growth pts (total)</span>
+        <span class="stat-value" id="growth-num">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Harvest quality</span>
+        <span class="stat-value" id="quality-num">80</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Age</span>
+        <span class="stat-value" id="age-num">0 ticks</span>
+      </div>
+      <div class="stat-row" id="poll-row">
+        <span class="stat-label" id="poll-lbl">Pollination</span>
+        <span class="stat-value" id="poll-num">—</span>
+      </div>
+      <div class="stat-row" id="vern-row">
+        <span class="stat-label">Vernalization</span>
+        <span class="stat-value" id="vern-num">0 / 15 cold ticks</span>
+      </div>
+
+      <div id="science-callout">
+        <div class="sc-title" id="sc-title">📚 Photosynthesis</div>
+        <div class="sc-body" id="sc-body">Light energy converts CO₂ + H₂O into sugars (glucose) that fuel all plant growth. Non-rectangular hyperbola model (Thornley 1976).</div>
+      </div>
+    </div>
+
+    <!-- CENTER: CHART + ECO -->
+    <div id="center-panel">
+      <div class="panel" id="chart-panel">
+        <div class="panel-title">📈 Growth History</div>
+        <canvas id="chart-canvas" height="170"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#40916c"></div>Growth pts</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#e63946"></div>Health %</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#4895ef"></div>Nut. factor</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f4a261"></div>Water factor</div>
+          <div class="legend-item" style="color:#aaa; font-size:9px; margin-left:4px;">│ = stage change</div>
+        </div>
+      </div>
+
+      <div class="panel" id="eco-panel">
+        <div class="panel-title">🌍 Ecosystem</div>
+        <div class="eco-row">
+          <span class="eco-label">🐛 Pests</span>
+          <div class="eco-bar"><div class="eco-fill" id="eco-pests" style="width:5%; background:#e63946"></div></div>
+          <span class="eco-val" id="eco-pests-v">5%</span>
+        </div>
+        <div class="eco-row">
+          <span class="eco-label">🐝 Bees</span>
+          <div class="eco-bar"><div class="eco-fill" id="eco-bees" style="width:60%; background:#f9c74f"></div></div>
+          <span class="eco-val" id="eco-bees-v">60%</span>
+        </div>
+        <div class="eco-row">
+          <span class="eco-label">🦋 Beneficials</span>
+          <div class="eco-bar"><div class="eco-fill" id="eco-ben" style="width:50%; background:#74c69d"></div></div>
+          <span class="eco-val" id="eco-ben-v">50%</span>
+        </div>
+        <div class="eco-row">
+          <span class="eco-label">🌱 Biodiversity</span>
+          <div class="eco-bar"><div class="eco-fill" id="eco-bio" style="width:50%; background:#9b5de5"></div></div>
+          <span class="eco-val" id="eco-bio-v">50%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTROLS PANEL -->
+    <div class="panel" id="controls-panel">
+      <div class="panel-title">⚙️ Environment</div>
+
+      <div class="ctrl-group">
+        <div class="ctrl-label">🌡 Temperature <span id="temp-v">25°C</span></div>
+        <input type="range" id="temp-sl" min="-10" max="50" value="25" step="1">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">☀️ Light intensity <span id="light-v">70%</span></div>
+        <input type="range" id="light-sl" min="0" max="100" value="70" step="1">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">💨 CO₂ level <span id="co2-v">410 ppm</span></div>
+        <input type="range" id="co2-sl" min="200" max="1200" value="410" step="10">
+      </div>
+      <div class="ctrl-group">
+        <div class="ctrl-label">🌫 Humidity <span id="hum-v">60%</span></div>
+        <input type="range" id="hum-sl" min="0" max="100" value="60" step="1">
+      </div>
+
+      <div class="toggle-row">
+        <span>🌧 Rainfall</span>
+        <button class="toggle-btn" id="rain-toggle"></button>
+      </div>
+
+      <div class="panel-title">🌱 Soil Amendments</div>
+      <div class="amend-grid">
+        <button class="amend-btn" data-amend="water">💧 Water (+10%)</button>
+        <button class="amend-btn" data-amend="compost">🌿 Compost</button>
+        <button class="amend-btn" data-amend="ammonium_nitrate">🟩 Nitrogen</button>
+        <button class="amend-btn" data-amend="bone_meal">🦴 Phosphorus</button>
+        <button class="amend-btn" data-amend="potash">🟤 Potassium</button>
+        <button class="amend-btn" data-amend="lime">⬜ Lime (↑pH)</button>
+        <button class="amend-btn" data-amend="sulfur">🟡 Sulfur (↓pH)</button>
+        <button class="amend-btn" data-amend="pesticide">🔴 Pesticide</button>
+      </div>
+
+      <div class="panel-title" style="margin-top: 12px;">🪱 Soil Status</div>
+      <div class="ctrl-label" style="margin-bottom:2px;">Moisture <span id="moist-v">30%</span></div>
+      <div class="mini-bar" style="margin-bottom:8px;">
+        <div class="mini-fill" id="moist-fill" style="width:30%; background: var(--blue)"></div>
+      </div>
+      <div class="soil-vals">
+        <div class="soil-kv"><span class="k">pH</span><span class="v" id="ph-v">6.5</span></div>
+        <div class="soil-kv"><span class="k">N (ppm)</span><span class="v" id="n-v">60</span></div>
+        <div class="soil-kv"><span class="k">P (ppm)</span><span class="v" id="p-v">40</span></div>
+        <div class="soil-kv"><span class="k">K (ppm)</span><span class="v" id="k-v">50</span></div>
+        <div class="soil-kv"><span class="k">Org. matter</span><span class="v" id="om-v">3.0%</span></div>
+        <div class="soil-kv"><span class="k">Microbes</span><span class="v" id="mb-v">0.70</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER: STRESS + LOG -->
+  <div id="footer">
+    <div class="panel">
+      <div class="panel-title">⚠️ Plant Stress Indicators</div>
+      <div class="stress-row">
+        <div class="stress-cell">
+          <div class="stress-icon">🌵</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-drought" style="height:0%; background:#e76f51"></div></div>
+          <div class="stress-lbl">Drought</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">🔥</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-heat" style="height:0%; background:#f4a261"></div></div>
+          <div class="stress-lbl">Heat</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">❄️</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-cold" style="height:0%; background:#90e0ef"></div></div>
+          <div class="stress-lbl">Cold</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">💧</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-waterlog" style="height:0%; background:#4895ef"></div></div>
+          <div class="stress-lbl">Waterlog</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">🟩</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-n" style="height:0%; background:#74c69d"></div></div>
+          <div class="stress-lbl">N defic.</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">🦴</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-p" style="height:0%; background:#f9c74f"></div></div>
+          <div class="stress-lbl">P defic.</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">🍌</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-k" style="height:0%; background:#f4a261"></div></div>
+          <div class="stress-lbl">K defic.</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">⚗️</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-tox" style="height:0%; background:#9b5de5"></div></div>
+          <div class="stress-lbl">Toxicity</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">🐛</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-pest" style="height:0%; background:#e63946"></div></div>
+          <div class="stress-lbl">Pests</div>
+        </div>
+        <div class="stress-cell">
+          <div class="stress-icon">⚡</div>
+          <div class="stress-bar"><div class="stress-fill" id="s-total" style="height:0%; background:#343a40"></div></div>
+          <div class="stress-lbl">Total</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">📚 Science Log</div>
+      <div id="science-log">
+        <p>▸ Simulation started. Liebig's Law: growth limited by scarcest nutrient.</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

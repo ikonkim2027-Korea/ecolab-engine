@@ -45,8 +45,8 @@
       background: var(--panel);
       border: 3px solid var(--border-hi);
       box-shadow:
-        inset 2px 2px 0 #3a8a3a,
-        inset -2px -2px 0 #1a3a1a,
+        inset 2px 2px 0 rgba(94,221,90,0.15),
+        inset -2px -2px 0 rgba(0,0,0,0.4),
         3px 3px 0 var(--bg);
     }
 
@@ -57,15 +57,15 @@
       background: #1e4a1e;
       border: 2px solid var(--border-hi);
       color: var(--text);
-      padding: 8px 10px;
+      padding: 0 12px;
       cursor: pointer;
       box-shadow: 0 4px 0 #0a1e0a, 2px 0 0 #0a1e0a;
       transition: transform .06s, box-shadow .06s;
       white-space: nowrap;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
-      min-height: 36px;
-      display: flex;
+      min-height: 44px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
     }
@@ -74,23 +74,11 @@
       transform: translate(2px, 4px);
       box-shadow: 0 0 0 #0a1e0a;
     }
-    .px-btn.active {
-      background: #1a6a1a;
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-    .px-btn.danger { border-color: var(--red); }
+    .px-btn.active { background: #1a6a1a; border-color: var(--gold); color: var(--gold); }
+    .px-btn.danger { border-color: var(--red); color: var(--red); }
     .px-btn.danger:hover { background: #4a1a1a; }
-    #pause-btn {
-      background: #1e4422;
-      border-color: var(--green);
-      color: var(--green-hi);
-    }
-    #pause-btn.paused {
-      background: #3a1a00;
-      border-color: var(--gold);
-      color: var(--gold);
-    }
+    #pause-btn { background: #1a3a1a; border-color: var(--green); color: var(--green-hi); }
+    #pause-btn.paused { background: #3a1a00; border-color: var(--gold); color: var(--gold); }
 
     /* ── SEGMENTED BAR ──────────────────────────────── */
     .seg-wrap {
@@ -102,10 +90,10 @@
     }
     .seg-fill {
       height: 100%;
-      transition: width .4s;
+      transition: width .35s;
       background: repeating-linear-gradient(
         90deg,
-        var(--bar-color, #50c050) 0, var(--bar-color, #50c050) 7px,
+        var(--bar-color, var(--green)) 0, var(--bar-color, var(--green)) 7px,
         transparent 7px, transparent 9px
       );
     }
@@ -114,18 +102,20 @@
     #hdr {
       flex-shrink: 0;
       background: #162816;
-      border-bottom: 3px solid var(--border);
+      border-bottom: 3px solid var(--border-hi);
+      box-shadow: 0 3px 0 #0a1a0a;
       display: flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 8px;
+      padding: 6px 10px;
       flex-wrap: wrap;
+      min-height: 52px;
     }
     #logo {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--gold);
       letter-spacing: 1px;
-      text-shadow: 2px 2px 0 #0a1a0a, 0 0 10px rgba(255, 215, 0, 0.35);
+      text-shadow: 2px 2px 0 #0a1a0a, 0 0 12px rgba(255,215,0,0.4);
       flex-shrink: 0;
     }
     .sp-row { display: flex; gap: 4px; flex-wrap: wrap; }
@@ -135,13 +125,14 @@
       background: #1a2a1a;
       border: 2px solid var(--border);
       color: var(--muted);
-      padding: 5px 7px;
+      padding: 0 10px;
       cursor: pointer;
       transition: all .1s;
-      min-height: 32px;
+      min-height: 36px;
       -webkit-tap-highlight-color: transparent;
+      display: inline-flex; align-items: center; gap: 4px;
     }
-    .sp-btn:hover { border-color: var(--border-hi); color: var(--text); }
+    .sp-btn:hover { color: var(--text); }
     .sp-btn[data-sp="lettuce"] { --sp-color: #5cdc3c; }
     .sp-btn[data-sp="tomato"]  { --sp-color: #ff4455; }
     .sp-btn[data-sp="corn"]    { --sp-color: #ffd700; }
@@ -151,10 +142,11 @@
       background: var(--sp-color, var(--gold));
       color: #141f14;
       border-color: var(--sp-color, var(--gold));
+      box-shadow: 0 0 8px var(--sp-color, var(--gold));
     }
-    .gap { flex: 1; }
-    #tick-lbl { color: var(--muted); font-size: 7px; white-space: nowrap; }
-    #tick-lbl strong { color: var(--green-hi); }
+    .gap { flex: 1; min-width: 6px; }
+    #tick-lbl { color: var(--muted); font-size: 8px; white-space: nowrap; }
+    #tick-lbl strong { color: var(--green-hi); font-size: 11px; }
     .speed-row { display: flex; gap: 3px; }
     .spd-btn {
       font-family: 'Press Start 2P', monospace;
@@ -162,53 +154,70 @@
       background: #1a2a1a;
       border: 2px solid var(--border);
       color: var(--muted);
-      padding: 4px 8px;
+      padding: 0 10px;
       cursor: pointer;
-      min-height: 30px;
+      min-height: 36px;
       -webkit-tap-highlight-color: transparent;
+      display: inline-flex; align-items: center;
     }
-    .spd-btn.active { border-color: var(--gold); color: var(--gold); }
+    .spd-btn.active { border-color: var(--gold); color: var(--gold); background: #2a2000; }
 
     /* ── LAYOUT ─────────────────────────────────────── */
-    #app {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    #content {
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
-    }
+    #app { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    #content { flex: 1; min-height: 0; overflow: hidden; }
 
-    /* Mobile: one tab at a time */
-    .tab-pane { display: none; height: 100%; overflow-y: auto; padding: 8px; }
+    /* Mobile: tab panes stacked, one visible at a time */
+    .tab-pane { display: none; height: 100%; overflow-y: auto; padding: 10px; }
     .tab-pane.show { display: block; }
 
-    /* Desktop: grid */
+    /* Desktop: 2-column game layout */
     @media (min-width: 760px) {
       #content {
         display: grid;
-        grid-template-columns: 240px 1fr 248px;
-        grid-template-rows: 1fr auto;
-        gap: 8px;
-        padding: 8px;
+        grid-template-columns: minmax(300px, 44%) 1fr;
+        gap: 10px;
+        padding: 10px;
         overflow: hidden;
+        height: 100%;
       }
-      .tab-pane { display: block !important; padding: 0; height: auto; overflow: visible; }
-      #pane-plant { grid-column: 1; grid-row: 1 / span 2; overflow-y: auto; }
-      #pane-stats { grid-column: 2; grid-row: 1; }
-      #pane-grow  { grid-column: 3; grid-row: 1 / span 2; overflow-y: auto; }
-      #pane-health{ grid-column: 2; grid-row: 2; }
+      /* pane-right: display:contents on mobile makes children siblings,
+         on desktop it becomes the right flex column */
+      #pane-right {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        overflow-y: auto;
+        min-height: 0;
+        padding-right: 2px;
+      }
+      .tab-pane {
+        display: block !important;
+        height: auto;
+        overflow: visible;
+        padding: 0;
+      }
+      #pane-plant {
+        display: flex !important;
+        flex-direction: column;
+        gap: 8px;
+        overflow-y: auto;
+        min-height: 0;
+        padding: 0;
+      }
+      #pane-stats, #pane-grow, #pane-health { flex-shrink: 0; }
       #bottom-nav { display: none !important; }
+    }
+
+    /* Mobile: pane-right collapses so children are still tab-panes */
+    @media (max-width: 759px) {
+      #pane-right { display: contents; }
     }
 
     /* ── BOTTOM NAV (mobile) ────────────────────────── */
     #bottom-nav {
       flex-shrink: 0;
       display: flex;
-      background: #0e1e0e;
+      background: #0e1a0e;
       border-top: 3px solid var(--border-hi);
       box-shadow: 0 -4px 0 #0a1a0a;
     }
@@ -219,7 +228,7 @@
       background: transparent;
       border: none;
       color: var(--muted);
-      padding: 10px 4px;
+      padding: 8px 4px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -228,94 +237,124 @@
       -webkit-tap-highlight-color: transparent;
       min-height: 52px;
     }
-    .nav-btn span { font-size: 18px; line-height: 1; }
-    .nav-btn.active { color: var(--gold); border-top: 2px solid var(--gold); border-bottom: 3px solid var(--gold); }
+    .nav-btn span { font-size: 20px; line-height: 1; }
+    .nav-btn.active { color: var(--gold); border-top: 3px solid var(--gold); }
 
     /* ── PLANT PANE ─────────────────────────────────── */
-    #pane-plant { display: flex; flex-direction: column; gap: 6px; }
-
     #plant-canvas-wrap {
       width: 100%;
+      aspect-ratio: 1 / 1;
       position: relative;
       border: 3px solid var(--border-hi);
-      box-shadow: 0 0 16px rgba(110, 221, 90, 0.25), inset 0 0 4px rgba(0,0,0,0.6);
+      box-shadow:
+        0 0 20px rgba(110,221,90,0.2),
+        0 0 40px rgba(110,221,90,0.08),
+        inset 0 0 6px rgba(0,0,0,0.6),
+        4px 4px 0 var(--bg);
       background: var(--sky);
       border-radius: 2px;
       overflow: hidden;
+      flex-shrink: 0;
     }
     #plant-canvas {
       display: block;
       width: 100%;
+      height: 100%;
       image-rendering: pixelated;
       image-rendering: crisp-edges;
-      border: 3px solid var(--border-hi);
-      box-shadow: inset 2px 2px 0 #3a8a3a, inset -2px -2px 0 #1a3a1a;
     }
 
-    /* Stage progress bar */
-    #stage-bar { display: flex; gap: 3px; }
+    /* ── STAGE BAR ──────────────────────────────────── */
+    #stage-bar {
+      display: flex;
+      gap: 3px;
+      flex-shrink: 0;
+    }
     .stg-pip {
-      flex: 1; height: 8px;
+      flex: 1;
+      height: 10px;
       background: var(--bg);
       border: 2px solid var(--border);
+      transition: background .3s, border-color .3s;
     }
     .stg-pip.done { background: var(--green); border-color: var(--green-hi); }
-    .stg-pip.now  { background: var(--gold);  border-color: var(--gold); animation: pipblink .8s step-end infinite; }
-    @keyframes pipblink { 50% { opacity: .4; } }
+    .stg-pip.now  {
+      background: var(--gold);
+      border-color: var(--gold);
+      animation: pipblink .8s step-end infinite;
+      box-shadow: 0 0 6px var(--gold);
+    }
+    @keyframes pipblink { 50% { opacity: .35; } }
+
+    /* ── HUD STATS ──────────────────────────────────── */
+    .hud-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px 10px;
+      flex-shrink: 0;
+    }
+    .hud-cell {}
+    .hud-lbl { font-size: 8px; color: var(--muted); margin-bottom: 2px; }
+    .hud-val { font-size: 13px; color: var(--text); line-height: 1; }
 
     .row { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px; }
-    .lbl { color: var(--muted); font-size: 11px; }
-    .val { font-size: 14px; }
+    .lbl { color: var(--muted); font-size: 10px; }
+    .val { font-size: 13px; }
 
     #science-box {
-      background: #0a200a;
+      background: #0a1e0a;
       border: 2px solid var(--border);
-      box-shadow: inset 1px 1px 0 #2a5a2a;
-      padding: 8px;
+      box-shadow: inset 1px 1px 0 rgba(94,221,90,0.1);
+      padding: 10px;
+      flex-shrink: 0;
     }
-    #sc-title { color: var(--gold); font-size: 9px; margin-bottom: 5px; }
-    #sc-body { color: var(--muted); font-size: 10px; line-height: 1.7; }
+    #sc-title { color: var(--gold); font-size: 9px; margin-bottom: 6px; }
+    #sc-body { color: var(--muted); font-size: 10px; line-height: 1.8; }
 
-    /* ── STATS PANE ─────────────────────────────────── */
-    #pane-stats { display: flex; flex-direction: column; gap: 8px; }
-
+    /* ── PANEL TITLES ───────────────────────────────── */
     .pane-title {
       font-size: 10px;
-      color: var(--gold);
       border-bottom: 2px solid var(--border);
-      padding-bottom: 5px;
-      margin-bottom: 6px;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+      letter-spacing: .5px;
     }
-    #pane-plant  .pane-title { color: var(--green-hi); }
     #pane-stats  .pane-title { color: var(--blue); }
     #pane-grow   .pane-title { color: var(--gold); }
     #pane-health .pane-title { color: var(--red); }
 
+    /* ── CHART ──────────────────────────────────────── */
     #chart-canvas {
       display: block;
       width: 100%;
       background: var(--bg2);
       border: 2px solid var(--border);
     }
-    .chart-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 5px; }
-    .leg-item { display: flex; align-items: center; gap: 4px; font-size: 9px; color: var(--muted); }
-    .leg-dot { width: 8px; height: 8px; border: 1px solid rgba(255,255,255,.2); }
+    .chart-legend { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+    .leg-item { display: flex; align-items: center; gap: 5px; font-size: 9px; color: var(--muted); }
+    .leg-dot { width: 10px; height: 10px; border: 1px solid rgba(255,255,255,.2); flex-shrink: 0; }
 
-    .eco-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
-    .eco-lbl { width: 72px; font-size: 9px; color: var(--muted); flex-shrink: 0; }
+    /* ── ECOSYSTEM ──────────────────────────────────── */
+    .eco-section { margin-top: 4px; }
+    .eco-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .eco-lbl { width: 80px; font-size: 9px; color: var(--muted); flex-shrink: 0; }
     .eco-bar { flex: 1; }
-    .eco-val { width: 30px; font-size: 9px; text-align: right; color: var(--muted); }
+    .eco-val { width: 36px; font-size: 9px; text-align: right; flex-shrink: 0; }
 
     /* ── GROW PANE ──────────────────────────────────── */
-    #pane-grow { display: flex; flex-direction: column; gap: 6px; }
-
-    .ctrl-row { margin-bottom: 8px; }
-    .ctrl-lbl { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin-bottom: 4px; }
-    .ctrl-lbl span { color: var(--text); }
+    .ctrl-row { margin-bottom: 10px; }
+    .ctrl-lbl {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .ctrl-lbl span { color: var(--text); font-size: 10px; }
 
     input[type="range"] {
       width: 100%;
-      height: 4px;
+      height: 6px;
       accent-color: var(--green);
       cursor: pointer;
       -webkit-appearance: none;
@@ -324,11 +363,12 @@
     }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       background: var(--green-hi);
       border: 2px solid var(--bg);
       cursor: pointer;
+      box-shadow: 0 0 4px var(--green);
     }
 
     .amend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
@@ -338,15 +378,16 @@
       background: #162816;
       border: 2px solid var(--border);
       color: var(--muted);
-      padding: 8px 4px;
+      padding: 0 4px;
       cursor: pointer;
       transition: all .1s;
-      min-height: 38px;
+      min-height: 44px;
       -webkit-tap-highlight-color: transparent;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
     }
     .amend-btn:hover { border-color: var(--green-hi); color: var(--text); background: #1e3a1e; }
     .amend-btn:active { background: #2a5a2a; }
-    .amend-btn.lit  { border-color: var(--gold) !important; color: var(--gold) !important; }
+    .amend-btn.lit  { border-color: var(--gold) !important; color: var(--gold) !important; box-shadow: 0 0 8px var(--gold); }
     .amend-btn[data-amend="water"]            { border-color: var(--blue); }
     .amend-btn[data-amend="compost"]          { border-color: var(--soil); }
     .amend-btn[data-amend="ammonium_nitrate"] { border-color: var(--green); }
@@ -356,45 +397,45 @@
     .amend-btn[data-amend="sulfur"]           { border-color: var(--gold); }
     .amend-btn[data-amend="pesticide"]        { border-color: var(--red); }
 
-    .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .toggle-lbl { font-size: 9px; color: var(--muted); }
     .toggle-btn {
-      width: 44px; height: 22px;
+      width: 48px; height: 26px;
       background: var(--border);
       border: 2px solid var(--border-hi);
       cursor: pointer;
       position: relative;
       transition: background .2s;
       -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
     }
-    .toggle-btn.on { background: var(--green); }
+    .toggle-btn.on { background: var(--green); box-shadow: 0 0 8px var(--green); }
     .toggle-btn::after {
       content: '';
       position: absolute;
-      width: 14px; height: 14px;
+      width: 16px; height: 16px;
       background: var(--text);
-      top: 2px; left: 2px;
+      top: 3px; left: 3px;
       transition: left .15s;
     }
-    .toggle-btn.on::after { left: 24px; }
+    .toggle-btn.on::after { left: 25px; }
 
-    .soil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 4px; }
-    .soil-kv .k { font-size: 8px; color: var(--muted); margin-bottom: 2px; }
+    .soil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 6px; }
+    .soil-kv { background: #0e1e0e; border: 1px solid var(--border); padding: 6px; }
+    .soil-kv .k { font-size: 8px; color: var(--muted); margin-bottom: 3px; }
     .soil-kv .v { font-size: 13px; color: var(--text); }
 
     /* ── HEALTH PANE ────────────────────────────────── */
-    #pane-health { display: flex; flex-direction: column; gap: 8px; }
-
     .stress-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 5px;
+      gap: 6px;
     }
     .s-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-    .s-icon { font-size: 14px; line-height: 1; }
+    .s-icon { font-size: 16px; line-height: 1; }
     .s-bar {
       width: 100%;
-      height: 36px;
+      height: 40px;
       background: var(--bg);
       border: 2px solid var(--border);
       display: flex;
@@ -402,29 +443,34 @@
       overflow: hidden;
     }
     .s-fill { width: 100%; transition: height 0.08s linear; }
-    .s-lbl { font-size: 8px; color: var(--muted); text-align: center; line-height: 1.3; }
+    .s-lbl { font-size: 8px; color: var(--muted); text-align: center; line-height: 1.4; }
 
     #science-log {
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0,0,0,0.4);
       border: 2px solid var(--border);
-      border-left: 3px solid var(--border-hi);
-      padding: 6px 8px;
+      border-left: 4px solid var(--border-hi);
+      padding: 8px 10px;
       font-size: 10px;
-      line-height: 1.8;
+      line-height: 2;
       color: var(--muted);
-      max-height: 100px;
+      max-height: 120px;
       overflow-y: auto;
+      min-height: 48px;
     }
     #science-log .stage { color: var(--green-hi); }
     #science-log .warn  { color: var(--gold); }
 
     /* ── MISC ───────────────────────────────────────── */
-    .divider { border: none; border-top: 2px solid var(--border); margin: 6px 0; }
-    ::-webkit-scrollbar { width: 4px; }
+    .divider { border: none; border-top: 2px solid var(--border); margin: 8px 0; }
+    ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: var(--border); }
+    ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 0; }
+
+    /* ── TOOLTIP hint ───────────────────────────────── */
+    [title] { cursor: help; }
+    .amend-btn[title], .sp-btn[title] { cursor: pointer; }
   </style>
-  <script type="module" crossorigin src="/assets/index-fZvhzo-7.js"></script>
+  <script type="module" crossorigin src="/assets/index-DyGLV3Zl.js"></script>
 </head>
 <body>
 
@@ -432,182 +478,251 @@
 <div id="hdr">
   <div id="logo">🌿 ECOLAB FARM</div>
   <div class="sp-row">
-    <button class="sp-btn active" data-sp="lettuce">🥬 LETTUCE</button>
-    <button class="sp-btn" data-sp="tomato">🍅 TOMATO</button>
-    <button class="sp-btn" data-sp="corn">🌽 CORN</button>
-    <button class="sp-btn" data-sp="grape">🍇 GRAPE</button>
+    <button class="sp-btn active" data-sp="lettuce"  title="Lettuce — cool-weather crop, fast-growing">🥬 LETTUCE</button>
+    <button class="sp-btn"        data-sp="tomato"   title="Tomato — warm-weather, needs pollination">🍅 TOMATO</button>
+    <button class="sp-btn"        data-sp="corn"     title="Corn — C4 photosynthesis, CO₂-efficient">🌽 CORN</button>
+    <button class="sp-btn"        data-sp="grape"    title="Grape — needs vernalization (cold exposure)">🍇 GRAPE</button>
   </div>
   <div class="gap"></div>
   <div id="tick-lbl">TICK <strong id="tick-num">0</strong></div>
   <div class="speed-row">
-    <button class="spd-btn active" data-speed="1">1×</button>
-    <button class="spd-btn" data-speed="3">3×</button>
-    <button class="spd-btn" data-speed="10">10×</button>
+    <button class="spd-btn active" data-speed="1"  title="1× — real time">1×</button>
+    <button class="spd-btn"        data-speed="3"  title="3× — fast forward">3×</button>
+    <button class="spd-btn"        data-speed="10" title="10× — turbo">10×</button>
   </div>
-  <button class="px-btn" id="pause-btn">⏸ PAUSE</button>
-  <button class="px-btn danger" id="reset-btn">↺ RESET</button>
+  <button class="px-btn" id="pause-btn" title="Pause / Resume simulation">⏸ PAUSE</button>
+  <button class="px-btn danger" id="reset-btn" title="Reset current species from seed">↺ RESET</button>
 </div>
 
 <div id="app">
 <div id="content">
 
-  <!-- ══ PLANT PANE ════════════════════════════════════ -->
+  <!-- ══ LEFT: PLANT VIEW ═════════════════════════════ -->
   <div id="pane-plant" class="tab-pane show">
-    <div id="plant-canvas-wrap"><canvas id="plant-canvas" height="192"></canvas></div>
 
-    <div id="stage-bar">
-      <div class="stg-pip"></div><div class="stg-pip"></div><div class="stg-pip"></div>
-      <div class="stg-pip"></div><div class="stg-pip"></div><div class="stg-pip"></div>
-      <div class="stg-pip"></div>
+    <!-- Canvas: fills column width, aspect-ratio 1:1 -->
+    <div id="plant-canvas-wrap">
+      <canvas id="plant-canvas"></canvas>
     </div>
 
-    <div class="row"><span class="lbl">STAGE</span><span class="val" id="stage-lbl" style="color:var(--green-hi)">SEED</span></div>
+    <!-- Stage progress pips -->
+    <div id="stage-bar">
+      <div class="stg-pip" title="Seed"></div>
+      <div class="stg-pip" title="Germinating"></div>
+      <div class="stg-pip" title="Seedling"></div>
+      <div class="stg-pip" title="Vegetative"></div>
+      <div class="stg-pip" title="Flowering"></div>
+      <div class="stg-pip" title="Fruiting"></div>
+      <div class="stg-pip" title="Harvest Ready"></div>
+    </div>
+
+    <!-- Stage + key stats -->
+    <div class="row">
+      <span class="lbl">STAGE</span>
+      <span class="val" id="stage-lbl" style="color:var(--green-hi)">SEED</span>
+    </div>
+
     <div class="row"><span class="lbl">HEALTH</span><span class="val" id="health-num">100</span></div>
-    <div class="seg-wrap" style="--bar-color:#50c050; margin-bottom:5px;">
+    <div class="seg-wrap" style="--bar-color:var(--green); margin-bottom:6px;">
       <div class="seg-fill" id="health-fill" style="width:100%"></div>
     </div>
+
     <div class="row"><span class="lbl">WATER</span><span class="val" id="water-num">50%</span></div>
-    <div class="seg-wrap" style="--bar-color:#4888d0; margin-bottom:5px;">
+    <div class="seg-wrap" style="--bar-color:var(--blue); margin-bottom:6px;">
       <div class="seg-fill" id="water-fill" style="width:50%"></div>
     </div>
-    <div class="row"><span class="lbl">GROWTH PTS</span><span class="val" id="growth-num">0</span></div>
-    <div class="row"><span class="lbl">QUALITY</span><span class="val" id="quality-num">80</span></div>
-    <div class="row"><span class="lbl">AGE</span><span class="val" id="age-num">0</span></div>
-    <div class="row" id="poll-row" style="display:none"><span class="lbl">POLLINATION</span><span class="val" id="poll-num">—</span></div>
-    <div class="row" id="vern-row" style="display:none"><span class="lbl">VERN. TICKS</span><span class="val" id="vern-num">0/15</span></div>
 
-    <hr class="divider">
+    <div class="hud-grid" style="margin-bottom:6px;">
+      <div class="hud-cell"><div class="hud-lbl">GROWTH PTS</div><div class="hud-val" id="growth-num">0</div></div>
+      <div class="hud-cell"><div class="hud-lbl">QUALITY</div><div class="hud-val" id="quality-num">80</div></div>
+      <div class="hud-cell"><div class="hud-lbl">AGE</div><div class="hud-val" id="age-num">0</div></div>
+      <div class="hud-cell" id="poll-row" style="display:none">
+        <div class="hud-lbl">POLLINATION</div><div class="hud-val" id="poll-num">—</div>
+      </div>
+      <div class="hud-cell" id="vern-row" style="display:none">
+        <div class="hud-lbl">VERN. TICKS</div><div class="hud-val" id="vern-num">0/15</div>
+      </div>
+    </div>
+
     <div id="science-box">
       <div id="sc-title">📚 PHOTOSYNTHESIS</div>
       <div id="sc-body">Light energy converts CO₂ + H₂O into sugars that fuel all plant growth. Non-rectangular hyperbola model (Thornley 1976).</div>
     </div>
-  </div>
 
-  <!-- ══ STATS PANE ════════════════════════════════════ -->
-  <div id="pane-stats" class="tab-pane px-panel" style="padding:10px;">
-    <div class="pane-title">📈 GROWTH HISTORY</div>
-    <canvas id="chart-canvas" height="160"></canvas>
-    <div class="chart-legend">
-      <div class="leg-item"><div class="leg-dot" style="background:#50c050"></div>GROWTH</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#d84040"></div>HEALTH</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#4888d0"></div>NUTRIENTS</div>
-      <div class="leg-item"><div class="leg-dot" style="background:#f0c840"></div>WATER</div>
-    </div>
-    <hr class="divider">
-    <div class="pane-title">🌍 ECOSYSTEM</div>
-    <div class="eco-row">
-      <span class="eco-lbl">🐛 PESTS</span>
-      <div class="eco-bar seg-wrap" style="--bar-color:#d84040">
-        <div class="seg-fill" id="eco-pests" style="width:5%"></div>
+  </div><!-- #pane-plant -->
+
+  <!-- ══ RIGHT: INFO PANELS (stacked on desktop, tabbed on mobile) ══ -->
+  <div id="pane-right">
+
+    <!-- ── STATS & ECOSYSTEM ──────────────────────── -->
+    <div id="pane-stats" class="tab-pane px-panel" style="padding:12px;">
+      <div class="pane-title">📈 GROWTH HISTORY</div>
+      <canvas id="chart-canvas" height="160"></canvas>
+      <div class="chart-legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#50c050"></div>GROWTH</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#d84040"></div>HEALTH</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#4888d0"></div>NUTRIENTS</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#f0c840"></div>WATER</div>
       </div>
-      <span class="eco-val" id="eco-pests-v">5%</span>
-    </div>
-    <div class="eco-row">
-      <span class="eco-lbl">🐝 BEES</span>
-      <div class="eco-bar seg-wrap" style="--bar-color:#f0c840">
-        <div class="seg-fill" id="eco-bees" style="width:60%"></div>
+      <hr class="divider">
+      <div class="pane-title">🌍 ECOSYSTEM</div>
+      <div class="eco-section">
+        <div class="eco-row">
+          <span class="eco-lbl" title="Pest pressure on crop">🐛 PESTS</span>
+          <div class="eco-bar seg-wrap" style="--bar-color:#d84040">
+            <div class="seg-fill" id="eco-pests" style="width:5%"></div>
+          </div>
+          <span class="eco-val" id="eco-pests-v">5%</span>
+        </div>
+        <div class="eco-row">
+          <span class="eco-lbl" title="Bee population (pollination)">🐝 BEES</span>
+          <div class="eco-bar seg-wrap" style="--bar-color:#f0c840">
+            <div class="seg-fill" id="eco-bees" style="width:60%"></div>
+          </div>
+          <span class="eco-val" id="eco-bees-v">60%</span>
+        </div>
+        <div class="eco-row">
+          <span class="eco-lbl" title="Predatory insects (eat pests)">🦋 BENEFICIALS</span>
+          <div class="eco-bar seg-wrap" style="--bar-color:var(--green)">
+            <div class="seg-fill" id="eco-ben" style="width:50%"></div>
+          </div>
+          <span class="eco-val" id="eco-ben-v">50%</span>
+        </div>
+        <div class="eco-row">
+          <span class="eco-lbl" title="Overall ecosystem health">🌿 BIODIVERSITY</span>
+          <div class="eco-bar seg-wrap" style="--bar-color:#9050d0">
+            <div class="seg-fill" id="eco-bio" style="width:50%"></div>
+          </div>
+          <span class="eco-val" id="eco-bio-v">50%</span>
+        </div>
       </div>
-      <span class="eco-val" id="eco-bees-v">60%</span>
     </div>
-    <div class="eco-row">
-      <span class="eco-lbl">🦋 BENEFICIALS</span>
-      <div class="eco-bar seg-wrap" style="--bar-color:#50c050">
-        <div class="seg-fill" id="eco-ben" style="width:50%"></div>
+
+    <!-- ── ENVIRONMENT & SOIL ─────────────────────── -->
+    <div id="pane-grow" class="tab-pane px-panel" style="padding:12px;">
+      <div class="pane-title">⚙️ ENVIRONMENT</div>
+
+      <div class="ctrl-row">
+        <div class="ctrl-lbl">🌡 TEMPERATURE <span id="v-temp">25°C</span></div>
+        <input type="range" id="sl-temp" min="-10" max="50" value="25" step="1"
+               title="Air temperature in °C. Each species has an optimal range — check science box for stress warnings.">
       </div>
-      <span class="eco-val" id="eco-ben-v">50%</span>
-    </div>
-    <div class="eco-row">
-      <span class="eco-lbl">🌿 BIODIVERSITY</span>
-      <div class="eco-bar seg-wrap" style="--bar-color:#9050d0">
-        <div class="seg-fill" id="eco-bio" style="width:50%"></div>
+      <div class="ctrl-row">
+        <div class="ctrl-lbl">☀️ LIGHT INTENSITY <span id="v-light">70%</span></div>
+        <input type="range" id="sl-light" min="0" max="100" value="70" step="1"
+               title="Solar radiation 0–100%. Photosynthesis saturates above ~50% for most crops.">
       </div>
-      <span class="eco-val" id="eco-bio-v">50%</span>
-    </div>
-  </div>
+      <div class="ctrl-row">
+        <div class="ctrl-lbl">💨 CO₂ LEVEL <span id="v-co2">410 ppm</span></div>
+        <input type="range" id="sl-co2" min="200" max="1200" value="410" step="10"
+               title="Atmospheric CO₂. C3 plants benefit from elevated CO₂; C4 plants (corn) are already saturated.">
+      </div>
+      <div class="ctrl-row">
+        <div class="ctrl-lbl">🌫 HUMIDITY <span id="v-hum">60%</span></div>
+        <input type="range" id="sl-hum" min="0" max="100" value="60" step="1"
+               title="Relative humidity affects evaporation rate from soil (higher humidity = slower drying).">
+      </div>
+      <div class="toggle-row">
+        <span class="toggle-lbl" title="Toggle continuous rainfall — adds 5mm/tick moisture">🌧 RAINFALL</span>
+        <button class="toggle-btn" id="rain-toggle" title="Toggle rainfall on/off — continuous +5mm/tick moisture"></button>
+      </div>
 
-  <!-- ══ GROW PANE ═════════════════════════════════════ -->
-  <div id="pane-grow" class="tab-pane px-panel" style="padding:10px;">
-    <div class="pane-title">⚙️ ENVIRONMENT</div>
+      <hr class="divider">
+      <div class="pane-title">🌱 SOIL AMENDMENTS</div>
+      <div class="amend-grid">
+        <button class="amend-btn" data-amend="water"            title="Add water: +10% soil moisture directly">💧 WATER</button>
+        <button class="amend-btn" data-amend="compost"          title="Compost: slow NPK release + boosts soil microbes (+organic matter)">🌿 COMPOST</button>
+        <button class="amend-btn" data-amend="ammonium_nitrate" title="NH₄NO₃: fast nitrogen boost, slightly acidifies soil (−0.2 pH)">🟩 NITROGEN</button>
+        <button class="amend-btn" data-amend="bone_meal"        title="Ca₃(PO₄)₂: phosphorus source, slight pH rise (+0.1)">🦴 PHOSPHORUS</button>
+        <button class="amend-btn" data-amend="potash"           title="KCl: potassium for fruit quality and sugar transport, pH neutral">🟤 POTASSIUM</button>
+        <button class="amend-btn" data-amend="lime"             title="CaCO₃: raises pH via acid neutralisation (+0.5 pH). Use when below 6.0.">⬜ LIME ↑pH</button>
+        <button class="amend-btn" data-amend="sulfur"           title="Elemental S → H₂SO₄ via bacteria: lowers pH (−0.5). Use when above 7.5.">🟡 SULFUR ↓pH</button>
+        <button class="amend-btn" data-amend="pesticide"        title="Targeted pesticide: kills 60% pests but 15% beneficial insect loss">🔴 PESTICIDE</button>
+      </div>
 
-    <div class="ctrl-row">
-      <div class="ctrl-lbl">🌡 TEMPERATURE <span id="v-temp">25°C</span></div>
-      <input type="range" id="sl-temp" min="-10" max="50" value="25" step="1"
-             title="Air temperature in °C. Each species has an optimal range.">
-    </div>
-    <div class="ctrl-row">
-      <div class="ctrl-lbl">☀️ LIGHT INTENSITY <span id="v-light">70%</span></div>
-      <input type="range" id="sl-light" min="0" max="100" value="70" step="1"
-             title="Solar radiation 0-100%. Photosynthesis saturates above ~50%.">
-    </div>
-    <div class="ctrl-row">
-      <div class="ctrl-lbl">💨 CO₂ LEVEL <span id="v-co2">410 ppm</span></div>
-      <input type="range" id="sl-co2" min="200" max="1200" value="410" step="10"
-             title="Atmospheric CO₂. C3 plants benefit from elevated CO₂; C4 plants (corn) are already saturated.">
-    </div>
-    <div class="ctrl-row">
-      <div class="ctrl-lbl">🌫 HUMIDITY <span id="v-hum">60%</span></div>
-      <input type="range" id="sl-hum" min="0" max="100" value="60" step="1"
-             title="Relative humidity affects evaporation rate from soil.">
-    </div>
-    <div class="toggle-row">
-      <span class="toggle-lbl">🌧 RAINFALL</span>
-      <button class="toggle-btn" id="rain-toggle" title="Toggle rainfall on/off"></button>
-    </div>
-
-    <hr class="divider">
-    <div class="pane-title">🌱 SOIL AMENDMENTS</div>
-    <div class="amend-grid">
-      <button class="amend-btn" data-amend="water"            title="Add water directly to soil (+10% moisture)">💧 WATER</button>
-      <button class="amend-btn" data-amend="compost"          title="Compost: slow NPK release + boosts soil microbes">🌿 COMPOST</button>
-      <button class="amend-btn" data-amend="ammonium_nitrate" title="NH₄NO₃: fast nitrogen boost, slightly acidifies soil">🟩 NITROGEN</button>
-      <button class="amend-btn" data-amend="bone_meal"        title="Ca₃(PO₄)₂: phosphorus source, slight pH rise">🦴 PHOSPHORUS</button>
-      <button class="amend-btn" data-amend="potash"           title="KCl: potassium for fruit quality, pH neutral">🟤 POTASSIUM</button>
-      <button class="amend-btn" data-amend="lime"             title="CaCO₃: raises pH via acid neutralisation">⬜ LIME ↑pH</button>
-      <button class="amend-btn" data-amend="sulfur"           title="Elemental S → H₂SO₄ via bacteria: lowers pH">🟡 SULFUR ↓pH</button>
-      <button class="amend-btn" data-amend="pesticide"        title="Targeted pesticide: kills 60% pests, 15% beneficial loss">🔴 PESTICIDE</button>
+      <hr class="divider">
+      <div class="pane-title">🪱 SOIL STATUS</div>
+      <div class="ctrl-lbl">MOISTURE <span id="v-moist">30%</span></div>
+      <div class="seg-wrap" style="--bar-color:var(--teal); margin-bottom:10px;">
+        <div class="seg-fill" id="moist-fill" style="width:30%"></div>
+      </div>
+      <div class="soil-grid">
+        <div class="soil-kv" title="Target: 6.0–7.0 for most crops"><div class="k">SOIL pH</div><div class="v" id="v-ph">6.5</div></div>
+        <div class="soil-kv" title="Nitrogen — leaf growth. Target: 40–80 ppm"><div class="k">N ppm</div><div class="v" id="v-n">60</div></div>
+        <div class="soil-kv" title="Phosphorus — roots & energy. Target: 25–50 ppm"><div class="k">P ppm</div><div class="v" id="v-p">40</div></div>
+        <div class="soil-kv" title="Potassium — fruit quality. Target: 40–80 ppm"><div class="k">K ppm</div><div class="v" id="v-k">50</div></div>
+        <div class="soil-kv" title="Organic matter — improves water retention and microbe activity"><div class="k">ORG. MATTER</div><div class="v" id="v-om">3.0%</div></div>
+        <div class="soil-kv" title="Microbe health — decompose organic matter, unlock nutrients"><div class="k">MICROBES</div><div class="v" id="v-mb">0.70</div></div>
+      </div>
     </div>
 
-    <hr class="divider">
-    <div class="pane-title">🪱 SOIL STATUS</div>
-    <div class="ctrl-lbl">MOISTURE <span id="v-moist">30%</span></div>
-    <div class="seg-wrap" style="--bar-color:#4888d0; margin-bottom:8px;">
-      <div class="seg-fill" id="moist-fill" style="width:30%"></div>
+    <!-- ── STRESS & LOG ───────────────────────────── -->
+    <div id="pane-health" class="tab-pane px-panel" style="padding:12px;">
+      <div class="pane-title">⚠️ STRESS INDICATORS</div>
+      <div class="stress-grid">
+        <div class="s-cell" title="Drought: stomata close, CO₂ blocked. Add water!">
+          <div class="s-icon">🌵</div>
+          <div class="s-bar"><div class="s-fill" id="s-drought" style="height:0%;background:#e76f51"></div></div>
+          <div class="s-lbl">DROUGHT</div>
+        </div>
+        <div class="s-cell" title="Heat: pollen dies >35°C, proteins denature. Lower temperature!">
+          <div class="s-icon">🔥</div>
+          <div class="s-bar"><div class="s-fill" id="s-heat" style="height:0%;background:#f4a261"></div></div>
+          <div class="s-lbl">HEAT</div>
+        </div>
+        <div class="s-cell" title="Cold: enzymes slow below Tmin, membranes solidify. Raise temperature!">
+          <div class="s-icon">❄️</div>
+          <div class="s-bar"><div class="s-fill" id="s-cold" style="height:0%;background:#90e0ef"></div></div>
+          <div class="s-lbl">COLD</div>
+        </div>
+        <div class="s-cell" title="Waterlogging: root anoxia from saturated soil. Reduce rain!">
+          <div class="s-icon">💧</div>
+          <div class="s-bar"><div class="s-fill" id="s-wlog" style="height:0%;background:#44b0ff"></div></div>
+          <div class="s-lbl">WATERLOG</div>
+        </div>
+        <div class="s-cell" title="Nitrogen deficiency: add ammonium nitrate or compost">
+          <div class="s-icon">🟩</div>
+          <div class="s-bar"><div class="s-fill" id="s-n" style="height:0%;background:#50c050"></div></div>
+          <div class="s-lbl">N DEFIC.</div>
+        </div>
+        <div class="s-cell" title="Phosphorus deficiency: add bone meal. Check pH 6–7 for best solubility.">
+          <div class="s-icon">🦴</div>
+          <div class="s-bar"><div class="s-fill" id="s-p" style="height:0%;background:#f9c74f"></div></div>
+          <div class="s-lbl">P DEFIC.</div>
+        </div>
+        <div class="s-cell" title="Potassium deficiency: add potash for fruit quality and sugar transport">
+          <div class="s-icon">🍌</div>
+          <div class="s-bar"><div class="s-fill" id="s-k" style="height:0%;background:#f4a261"></div></div>
+          <div class="s-lbl">K DEFIC.</div>
+        </div>
+        <div class="s-cell" title="Nutrient toxicity: excess salts cause osmotic stress (plasmolysis)">
+          <div class="s-icon">⚗️</div>
+          <div class="s-bar"><div class="s-fill" id="s-tox" style="height:0%;background:#9b5de5"></div></div>
+          <div class="s-lbl">TOXICITY</div>
+        </div>
+        <div class="s-cell" title="Pest damage: use pesticide or encourage beneficial insects">
+          <div class="s-icon">🐛</div>
+          <div class="s-bar"><div class="s-fill" id="s-pest" style="height:0%;background:#d84040"></div></div>
+          <div class="s-lbl">PESTS</div>
+        </div>
+        <div class="s-cell" title="Total combined stress — above 50% damages health each tick">
+          <div class="s-icon">💀</div>
+          <div class="s-bar"><div class="s-fill" id="s-total" style="height:0%;background:#888"></div></div>
+          <div class="s-lbl">TOTAL</div>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="pane-title">📜 SCIENCE LOG</div>
+      <div id="science-log">
+        <span class="stage" style="display:block">▸ Simulation started — Liebig's Law governs growth.</span>
+      </div>
     </div>
-    <div class="soil-grid">
-      <div class="soil-kv"><div class="k">SOIL pH</div><div class="v" id="v-ph">6.5</div></div>
-      <div class="soil-kv"><div class="k">N ppm</div><div class="v" id="v-n">60</div></div>
-      <div class="soil-kv"><div class="k">P ppm</div><div class="v" id="v-p">40</div></div>
-      <div class="soil-kv"><div class="k">K ppm</div><div class="v" id="v-k">50</div></div>
-      <div class="soil-kv"><div class="k">ORG. MATTER</div><div class="v" id="v-om">3.0%</div></div>
-      <div class="soil-kv"><div class="k">MICROBES</div><div class="v" id="v-mb">0.70</div></div>
-    </div>
-  </div>
 
-  <!-- ══ HEALTH PANE ════════════════════════════════════ -->
-  <div id="pane-health" class="tab-pane px-panel" style="padding:10px;">
-    <div class="pane-title">⚠️ STRESS INDICATORS</div>
-    <div class="stress-grid">
-      <div class="s-cell"><div class="s-icon">🌵</div><div class="s-bar"><div class="s-fill" id="s-drought" style="height:0%;background:#e76f51"></div></div><div class="s-lbl">DROUGHT</div></div>
-      <div class="s-cell"><div class="s-icon">🔥</div><div class="s-bar"><div class="s-fill" id="s-heat"    style="height:0%;background:#f4a261"></div></div><div class="s-lbl">HEAT</div></div>
-      <div class="s-cell"><div class="s-icon">❄️</div><div class="s-bar"><div class="s-fill" id="s-cold"    style="height:0%;background:#90e0ef"></div></div><div class="s-lbl">COLD</div></div>
-      <div class="s-cell"><div class="s-icon">💧</div><div class="s-bar"><div class="s-fill" id="s-wlog"    style="height:0%;background:#4888d0"></div></div><div class="s-lbl">WATERLOG</div></div>
-      <div class="s-cell"><div class="s-icon">🟩</div><div class="s-bar"><div class="s-fill" id="s-n"       style="height:0%;background:#50c050"></div></div><div class="s-lbl">N DEFIC.</div></div>
-      <div class="s-cell"><div class="s-icon">🦴</div><div class="s-bar"><div class="s-fill" id="s-p"       style="height:0%;background:#f9c74f"></div></div><div class="s-lbl">P DEFIC.</div></div>
-      <div class="s-cell"><div class="s-icon">🍌</div><div class="s-bar"><div class="s-fill" id="s-k"       style="height:0%;background:#f4a261"></div></div><div class="s-lbl">K DEFIC.</div></div>
-      <div class="s-cell"><div class="s-icon">⚗️</div><div class="s-bar"><div class="s-fill" id="s-tox"     style="height:0%;background:#9b5de5"></div></div><div class="s-lbl">TOXICITY</div></div>
-      <div class="s-cell"><div class="s-icon">🐛</div><div class="s-bar"><div class="s-fill" id="s-pest"    style="height:0%;background:#d84040"></div></div><div class="s-lbl">PESTS</div></div>
-      <div class="s-cell"><div class="s-icon">💀</div><div class="s-bar"><div class="s-fill" id="s-total"   style="height:0%;background:#888"></div></div><div class="s-lbl">TOTAL</div></div>
-    </div>
-    <hr class="divider">
-    <div class="pane-title">📜 SCIENCE LOG</div>
-    <div id="science-log">
-      <span class="stage">▸ Simulation started — Liebig's Law governs growth.</span>
-    </div>
-  </div>
+  </div><!-- #pane-right -->
 
 </div><!-- #content -->
 
-<!-- ══ BOTTOM NAV ════════════════════════════════════ -->
+<!-- ══ BOTTOM NAV (mobile only) ══════════════════════ -->
 <nav id="bottom-nav">
   <button class="nav-btn active" data-tab="plant"><span>🌱</span>PLANT</button>
   <button class="nav-btn" data-tab="stats"><span>📈</span>STATS</button>
